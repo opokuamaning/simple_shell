@@ -1,21 +1,33 @@
 #include "shell.h"
 /**
- * main - Entry point for the shell program
- * @argc: The argument count
- * @argv: The argument vector
- * Return: Always 0
+ * main - Entry point for the custom shell program.
+ *
+ * @argc: The number of command-line arguments.
+ * @argv: An array containing the command-line arguments.
  *
  * Description:
- * This function serves as the main entry point for the shell program.
- * It sets up the environment, processes command-line arguments,
- * and either executes commands from a file or enters interactive mode
- * to process user input.
+ * The main function serves as the entry point for the
+ * custom shell program. It performs
+ * the following steps:
+ * 1. Calls setup_environment() to initialize the shell environment.
+ * 2. Checks the number of command-line arguments:
+ *    a. If there are two arguments, assumes the second
+ *    argument is a script file and
+ *       executes commands from the file using
+ *       execute_commands_from_file(argv[1]).
+ *    b. If there are no or more than two arguments,
+ *    enters an interactive mode:
+ *       i. Displays a prompt ("$ ").
+ *       ii. Reads user input using get_input().
+ *       iii. Executes a single command using
+ *       execute_single_command(input).
+ *       iv. Frees the allocated memory for the input.
+ *       v. Repeats the interactive loop until the user exits.
+ * 3. Calls cleanup_memory() to release any allocated resources.
  *
- * Variables to Check (Betty):
- * - Function name (main) should be in lowercase.
- * - Parameter names (argc, argv) are fine; ensure they are lowercase.
+ * Return:
+ * The exit status of the shell program.
  */
-
 int main(int argc, char *argv[])
 {
 	char *input;
