@@ -7,13 +7,16 @@
 #include <unistd.h>
 #include <sys/wait.h>
 #include <ctype.h>
-
-typedef struct {
-    char *name;
-    char *value;
-} Alias;
+#include <sys/types.h>
 
 #define MAX_ALIASES 100
+
+struct Alias {
+    char *name;
+    char *value;
+};
+
+extern struct Alias aliases[MAX_ALIASES];
 
 #define ARG_MAX 1024
 
@@ -21,10 +24,10 @@ void setup_environment(void);
 char *get_input(void);
 void parse_input(char *input);
 void cleanup_memory(void);
-void execute_single_command(char *command);
+int execute_single_command(char *command);
 void execute_command(char *input);
 void execute_commands_from_file(const char *filename);
-void handle_exit(void);
+void handle_exit(char *status_str);
 void handle_env(void);
 char *custom_getline(void);
 int is_valid_integer(const char *str);
@@ -37,3 +40,4 @@ char *replace_variables(char *command);
 void tokenize_input(const char *input, char *args[], int *arg_count);
 
 #endif
+

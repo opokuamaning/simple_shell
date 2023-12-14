@@ -1,4 +1,4 @@
-#include <shell.h>
+#include "shell.h"
 /**
  * handle_setenv - Handle the 'setenv' built-in command.
  *
@@ -14,7 +14,7 @@
  */
 void handle_setenv(char *variable, char *value)
 {
-	if (variable != NULL && is_valid_variable(variable))
+	if (variable != NULL && is_valid_integer(variable))
 	{
 		if (setenv(variable, value, 1) == -1)
 		{
@@ -23,6 +23,6 @@ void handle_setenv(char *variable, char *value)
 	}
 	else
 	{
-		fprintf(stderr."setenv: Invalid variable name\n");
+		fprintf(stderr, "setenv: Invalid variable name\n");
 	}
 }

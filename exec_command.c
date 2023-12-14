@@ -62,7 +62,7 @@ int execute_single_command(char *command)
 
 		if (pid == 0)
 		{
-			args[arg_count] == NULL;
+			args[arg_count] = NULL;
 
 			if (execvp(args[0], args) == -1)
 			{
@@ -72,13 +72,14 @@ int execute_single_command(char *command)
 		}
 		else
 		{
-			waitid(pid, &status, 0);
+			siginfo_t info;
+			waitid(P_PID, pid, &info, WEXITED | WNOHANG, NULL);
 
 			if (strstr(command, "&&"))
 			{
 				if (WIFEXITED(status) && WEXITSTATUS(status) == 0)
 				{
-					char *next_command = strchr(command, "&") + 2;
+					char *next_command = strchr(command, '&') + 2;
 
 					if (next_command != NULL)
 					{
@@ -86,11 +87,11 @@ int execute_single_command(char *command)
 					}
 				}
 			}
-			else if (strstr(command), "||")
+			else if (strstr(command, "||"))
 			{
 				if (WIFEXITED(status) && WEXITSTATUS(status) != 0)
 				{
-					char *next_command = strchr(command, "|") + 2;
+					char *next_command = strchr(command, '&') + 2;
 
 					if (next_command != NULL)
 					{
@@ -117,6 +118,9 @@ int execute_single_command(char *command)
  */
 void execute_commands_from_file(const char *filename)
 {
+	char *line = NULL;
+	size_t len = 0;
+	ssize_t read;
 	FILE *file = fopen(filename, "r");
 
 	if (file == NULL)
@@ -124,10 +128,6 @@ void execute_commands_from_file(const char *filename)
 		perror("Error opening file");
 		exit(EXIT_FAILURE);
 	}
-
-	char *line = NULL;
-	size_t len = 0;
-	ssize_t read;
 
 	while ((read = getline(&line, &len, file)) != -1)
 	{
@@ -160,8 +160,7 @@ void execute_command(char *input)
 	while (token != NULL)
 	{
 		char *trimmed_command = trim_whitespace(token);
+		free(trimmed_command);
+		token = strtok(NULL, ";");
 	}
-
-	free(trimmed_command);
-	token = strtok(NULL, ";");
 }

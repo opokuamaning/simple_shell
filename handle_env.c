@@ -1,14 +1,17 @@
 #include "shell.h"
-/**
- * handle_env- Handles the 'env' builtin command.
+
+/*
+ * Handle the 'env' builtin command.
  *
- * Return:
- * This function prints the current environment variables.
+ * Description:
+ * This function prints the environment variables.
  */
-void handle_env(void)
-{
-	for (char **env = environ; *env != NULL; env++)
-	{
+void handle_env(void) {
+	extern char **environ;
+	char **env;
+
+	for (env = environ; *env != NULL; env++) {
 		printf("%s\n", *env);
 	}
 }
+
