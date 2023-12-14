@@ -102,7 +102,7 @@ int execute_single_command(char *command)
 	}
 
 	free(modified_command);
-	return status;
+	return (status);
 }
 
 /**

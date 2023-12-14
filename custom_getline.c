@@ -67,5 +67,5 @@ char *custom_getline(void)
 	/* Move past the newline character */
 	buffer_index++;
 
-	return result;
+	return (result);
 }
