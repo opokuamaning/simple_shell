@@ -22,14 +22,17 @@ char *custom_getline(void)
 {
 	static char buffer[ARG_MAX] = {0};
 	static size_t buffer_index = 0;
-	static ssize_t chars_read = 0;
+	static size_t chars_read = 0;
+	char *line = &buffer[buffer_index];
+	size_t line_length  = 0;
+	char *result = malloc(line_length + 1);
 
 	if (buffer_index == 0)
 	{
 		memset(buffer, 0, ARG_MAX);
 	}
 
-	if (buffer_index >= chars_read || chars_read == 0)
+	if (buffer_index >= (size_t)chars_read || chars_read == 0)
 	{
 		chars_read = read(STDIN_FILENO, buffer, ARG_MAX);
 		buffer_index = 0;
@@ -39,15 +42,12 @@ char *custom_getline(void)
 			return (NULL);
 		}
 
-		if (chars_read == -1)
+		if (chars_read == (size_t)-1L)
 		{
 			perror("Error reading input");
 			return (NULL);
 		}
 	}
-
-	char *line = &buffer[buffer_index];
-	size_t line_length = 0;
 
 	while (buffer_index < chars_read && buffer[buffer_index] != '\n')
 	{
@@ -55,7 +55,6 @@ char *custom_getline(void)
 		buffer_index++;
 	}
 
-	char *result = malloc(line_length + 1);
 	if (result == NULL)
 	{
 		perror("Error allocating memory");
@@ -65,7 +64,8 @@ char *custom_getline(void)
 	strncpy(result, line, line_length);
 	result[line_length] = '\0';
 
-	buffer_index++; // Move past the newline character
+	/* Move past the newline character */
+	buffer_index++;
 
 	return result;
 }
