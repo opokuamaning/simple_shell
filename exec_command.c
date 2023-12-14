@@ -73,7 +73,7 @@ int execute_single_command(char *command)
 		else
 		{
 			siginfo_t info;
-			waitid(P_PID, pid, &info, WEXITED | WNOHANG, NULL);
+			waitid(P_PID, pid, &info, WEXITED, NULL);
 
 			if (strstr(command, "&&"))
 			{

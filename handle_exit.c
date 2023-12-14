@@ -1,4 +1,16 @@
 #include "shell.h"
+static int last_exit_status = 0;
+
+/*
+ * get_last_exit_status - Get the last exit status.
+ *
+ * Description:
+ * This function returns the last exit status set by the handle_exit function.
+ */
+int get_last_exit_status(void)
+{
+	return last_exit_status;
+}
 /**
  * handle_exit - Handle the 'exit' built-in command.
  *
@@ -16,11 +28,12 @@ void handle_exit(char *status_str)
 	if (status_str != NULL)
 	{
 		status = atoi(status_str);
+		last_exit_status = status;
 	}
 	else
 	{
 		status = EXIT_SUCCESS;
 	}
 	cleanup_memory();
-	exit(status);
+	exit(last_exit_status);
 }
