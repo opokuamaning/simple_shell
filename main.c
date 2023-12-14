@@ -1,25 +1,30 @@
 #include "shell.h"
 
+/**
+ * main - Entry point for the simple_shell.
+ *
+ * Return: Always 0.
+ */
 int main(void)
 {
-    char *input;
+	char *line;
 
-    while (1)
-    {
-        printf("#cisfun$ ");
-        input = custom_getline();
+	while (1)
+	{
+		write(1, "$ ", 2);
+		line = custom_getline();
 
-        if (!input)
-        {
-            printf("\n");
-            break;
-        }
+		if (!line)
+		{
+			write(1, "\n", 1);
+			free(line);
+			exit(EXIT_SUCCESS);
+		}
 
-        execute_command(input);
+		execute_command(line);
+		free(line);
+	}
 
-        free(input);
-    }
-
-    return 0;
+	return (0);
 }
 
