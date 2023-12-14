@@ -7,12 +7,13 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <string.h>
-
+#include <stddef.h>
+#include <stdlib.h>
 #define BUFFER_SIZE 1024
 
 /* Function prototypes */
 char *custom_getline(void);
-void execute_command(char *input);
+int execute_command(char *command);
 
 #endif /* SHELL_H */
 

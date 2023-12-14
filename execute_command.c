@@ -1,43 +1,45 @@
 #include "shell.h"
 
 /**
- * execute_command - Execute a command in a child process.
+ * execute_command - Execute a command.
+ * @command: The command to execute.
  *
- * @input: The command to be executed.
- * Return: No return value.
+ * Return: Always 0.
  */
-void execute_command(char *input)
+int execute_command(char *command)
 {
-	char *args[2];
 	pid_t pid;
 	int status;
+	char *args[2];
 
-	input[strlen(input) - 1] = '\0';  /* Remove the newline character */
-
-	args[0] = input;
+	args[0] = command;
 	args[1] = NULL;
 
 	pid = fork();
+
 	if (pid == 0)
 	{
 		/* Child process */
 		if (execve(args[0], args, NULL) == -1)
 		{
-			perror("shell");
+			perror("Error in child process");
 			exit(EXIT_FAILURE);
 		}
 	}
 	else if (pid < 0)
 	{
-		perror("shell");
+		/* Forking error */
+		perror("Error forking process");
+		exit(EXIT_FAILURE);
 	}
 	else
 	{
 		/* Parent process */
-		while (!WIFEXITED(status) && !WIFSIGNALED(status))
-		{
+		do {
 			pid = waitpid(pid, &status, WUNTRACED);
-		}
+		} while (!WIFEXITED(status) && !WIFSIGNALED(status));
 	}
+
+	return (0);
 }
 
