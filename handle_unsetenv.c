@@ -1,4 +1,4 @@
-#include <shell.h>
+#include "shell.h"
 /**
  * handle_unsetenv - Handle the 'unsetenv' built-in command.
  *
@@ -12,7 +12,7 @@
  */
 void handle_unsetenv(char *variable)
 {
-	if (variable != NULL && is_valid_variable(variable))
+	if (variable != NULL && is_valid_integer(variable))
 	{
 		if (unsetenv(variable) == -1)
 		{

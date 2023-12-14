@@ -8,6 +8,7 @@
 #include <sys/wait.h>
 #include <ctype.h>
 #include <sys/types.h>
+#include <unistd.h>
 
 #define MAX_ALIASES 100
 
