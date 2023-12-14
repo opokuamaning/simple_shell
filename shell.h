@@ -18,8 +18,7 @@ struct Alias {
     char *name;
     char *value;
 };
-
-extern struct Alias aliases[MAX_ALIASES];
+struct Alias aliases[MAX_ALIASES];
 
 #define ARG_MAX 1024
 
