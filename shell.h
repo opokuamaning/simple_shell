@@ -42,5 +42,6 @@ void handle_alias(int arg_count, char *args[]);
 char *replace_variables(char *command);
 void tokenize_input(const char *input, char *args[], int *arg_count);
 int get_last_exit_status(void);
+char *trim_whitespace(const char *str);
 #endif
 
