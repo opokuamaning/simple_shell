@@ -1,24 +1,22 @@
 #include "shell.h"
 
 /**
- * get_line - stores into malloced buffer the user's command into shell
- * @str: buffer
- * Return: number of characters read
+ * get_line - reads a line from the standard input into a dynamically allocated buffer
+ * @str: pointer to a buffer that will store the user's command
+ * Return: number of characters read (including the newline character), or -1 on error
  */
 size_t get_line(char **str)
 {
 	ssize_t i = 0, size = 0, t = 0, t2 = 0, n = 0;
 	char buff[1024];
 
-	/* read while there's stdin greater than buffsize; -1 to add a '\0' */
-	while (t2 == 0 && (i = read(STDIN_FILENO, buff, 1024 - 1)))
+	/* Read until newline or end of input */
+	while (t2 == 0 && (i = read(STDIN_FILENO, buff, 1024 - 1)) > 0)
 	{
-		if (i == -1) /* check if read errored */
-			return (-1);
+		buff[i] = '\0'; /* Null-terminate buff to use with _strcat */
 
-		buff[i] = '\0'; /* terminate buff with \0 to use with _strcat */
-
-		n = 0; /* last loop if \n is found in the stdin read */
+		/* Check for newline in the input */
+		n = 0;
 		while (buff[n] != '\0')
 		{
 			if (buff[n] == '\n')
@@ -26,21 +24,24 @@ size_t get_line(char **str)
 			n++;
 		}
 
-		/* copy what's read to buff into get_line's buffer */
-		if (t == 0) /* malloc the first time */
+		/* Copy what's read to buff into the get_line's buffer */
+		if (t == 0) /* Malloc the first time */
 		{
-			i++;
-			*str = malloc(sizeof(char) * i);
+			*str = malloc((size_t)(i + 1)); /* +1 to account for the null terminator */
+			if (*str == NULL)
+				return -1; /* Error handling for malloc failure */
+
 			*str = _strcpy(*str, buff);
-			size = i;
+			size = i + 1;
 			t = 1;
 		}
-		else /* _realloc via _strcat with each loop */
+		else /* Realloc via _strcat with each loop */
 		{
 			size += i;
 			*str = _strcat(*str, buff);
 		}
 	}
+
 	return (size);
 }
 
